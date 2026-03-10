@@ -2,7 +2,7 @@ from rich.console import Console, RenderableType
 from rich.text import Text
 from rich.align import Align
 from rich.padding import Padding
-import os
+import subprocess
 import readchar
 
 _CONSOLE = Console()
@@ -146,7 +146,7 @@ def input(
         reverse = reverse
     )).strip()
 
-def clear_console(): os.system("cls")
+def clear_console(): subprocess.run("cls", shell = True)
 
 def wait_for_key(
     text = "Pulse cualquier tecla para continuar...",

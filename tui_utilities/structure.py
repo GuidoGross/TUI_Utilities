@@ -138,8 +138,9 @@ def confirmation_menu(
     message,
     selection_text = "Su elección: ",
     invalid_error = "La opción ingresada no es válida, intente nuevamente",
-    options_text = ["Sí", "No"]
+    options_text = None
 ):
+    if options_text is None: options_text = ["Sí", "No"]
     from .validation import validate_option
     options = {
         "1": options_text[0],
@@ -152,8 +153,9 @@ def confirm_exit(
     message = "¿Está seguro de que desea salir?",
     selection_text = "Su elección: ",
     invalid_error = "La opción ingresada no es válida, intente nuevamente",
-    options_text = ["Sí", "No"]
+    options_text = None
 ):
+    if options_text is None: options_text = ["Sí", "No"]
     selection = confirmation_menu(message, selection_text, invalid_error, options_text)
     if selection == "1": sys.exit()
 
