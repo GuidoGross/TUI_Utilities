@@ -84,9 +84,9 @@ Interactive validation utilities for user input.
 
 - validate_string(): ensures non-empty string input.
 
-- validate_integer(): validates integers (uses Continental European numeric format).
+- validate_integer(): validates integers (uses Continental European numeric format) with optional minimum and maximum values.
 
-- validate_double(): validates decimal numbers (uses Continental European numeric format).
+- validate_double(): validates decimal numbers (uses Continental European numeric format) with optional minimum and maximum values.
 
 - validate_datetime(): validates date and time input (uses Day–Month–Year date format with 24-hour time) with selectable year, time and second inclusion.
 

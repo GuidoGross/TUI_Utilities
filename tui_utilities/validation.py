@@ -1,4 +1,4 @@
-from .console import *
+from .console import print, input, wait_for_key
 from .structure import error_message
 from importlib.resources import files
 import requests
@@ -89,10 +89,13 @@ def validate_string(
 
 def validate_integer(
     message = "Ingrese un número: ",
+    minimum_value = None,
+    maximum_value = None,
     blank_error = "El número no puede estar vacío",
-    invalid_error = "El número ingresado no es válido, intente nuevamente"
+    invalid_error = "El número ingresado no es válido, intente nuevamente",
+    range_error = "El número ingresado no se encuentra dentro del rango permitido, intente nuevamente"
 ):
-    pattern = re.compile(r"^(?:\d{1,3}(?:\.\d{3})*|\d+)$")
+    pattern = re.compile(r"^-?(?:\d{1,3}(?:\.\d{3})*|\d+)$")
     while True:
         integer = input(text = message, bold = True)
         if not integer:
@@ -100,15 +103,22 @@ def validate_integer(
             continue
         if pattern.match(integer):
             unformatted_integer = integer.replace(".", "")
-            return int(unformatted_integer)
+            value = int(unformatted_integer)
+            if (minimum_value is not None and value < minimum_value) or (maximum_value is not None and value > maximum_value):
+                print(f"\n{range_error}\n", color = "#ff0000")
+                continue
+            return value
         print(f"\n{invalid_error}\n", color = "#ff0000")
 
 def validate_double(
     message = "Ingrese un número: ",
+    minimum_value = None,
+    maximum_value = None,
     blank_error = "El número no puede estar vacío",
-    invalid_error = "El número ingresado no es válido, intente nuevamente"
+    invalid_error = "El número ingresado no es válido, intente nuevamente",
+    range_error = "El número ingresado no se encuentra dentro del rango permitido, intente nuevamente"
 ):
-    pattern = re.compile(r"^(?:\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d{1,2}))?$")
+    pattern = re.compile(r"^-?(?:\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d{1,2}))?$")
     while True:
         double = input(text = message, bold = True)
         if not double:
@@ -116,7 +126,11 @@ def validate_double(
             continue
         if pattern.match(double):
             unformatted_double = double.replace(".", "").replace(",", ".")
-            return float(unformatted_double)
+            value = float(unformatted_double)
+            if (minimum_value is not None and value < minimum_value) or (maximum_value is not None and value > maximum_value):
+                print(f"\n{range_error}\n", color = "#ff0000")
+                continue
+            return value
         print(f"\n{invalid_error}\n", color = "#ff0000")
 
 def validate_datetime(
