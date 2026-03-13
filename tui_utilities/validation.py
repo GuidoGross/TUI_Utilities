@@ -1,13 +1,55 @@
 from .console import print, input, wait_for_key
 from .structure import error_message
 from importlib.resources import files
+import math
 import requests
 import re
 from datetime import datetime
 
-TLDS_LIST = files("tui_utilities._tlds").joinpath("tlds.txt")
+_TLDS_LIST = files("tui_utilities._tlds").joinpath("tlds.txt")
 
+_MATHEMATICAL_CONSTANTS = {
+    "pi": math.pi,
+    "e": math.e,
+    "tau": math.tau,
+    "phi": (1 + 5 ** 0.5) / 2
+}
+_value_pattern = r"-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?"
+_raw_numeric_range_pattern = rf"(?P<left_type>[\[\(])(?P<left_value>{_value_pattern}); (?P<right_value>{_value_pattern})(?P<right_type>[\]\)])"
+_numeric_range_pattern = re.compile(rf"^{_raw_numeric_range_pattern}(?: \| {_raw_numeric_range_pattern})*$")
 _email_pattern = None
+
+def _is_in_range(value, range):
+    if not range: return True
+    if not _numeric_range_pattern.match(range): return False
+    intervals = range.split(" | ")
+    for interval in intervals:
+        match = re.match(_raw_numeric_range_pattern, interval)
+        if not match: continue
+        left_type = match.group("left_type")
+        right_type = match.group("right_type")
+        left_raw_value = match.group("left_value")
+        right_raw_value = match.group("right_value")
+        
+        def parse_value(raw_value):
+            if raw_value.startswith("-"):
+                sign = -1
+                raw_value = raw_value[1:]
+            else: sign = 1
+            if raw_value == "infinity": return sign * float("inf")
+            if raw_value in _MATHEMATICAL_CONSTANTS: return sign * _MATHEMATICAL_CONSTANTS[raw_value]
+            if "/" in raw_value:
+                parts = raw_value.split("/")
+                return sign * (parse_value(parts[0]) / parse_value(parts[1]))
+            return sign * float(raw_value.replace(".", "").replace(",", "."))
+        
+        left_value = parse_value(left_raw_value)
+        right_value = parse_value(right_raw_value)
+        if left_value > right_value: continue
+        in_left = (value >= left_value) if left_type == "[" else (value > left_value)
+        in_right = (value <= right_value) if right_type == "]" else (value < right_value)
+        if in_left and in_right: return True
+    return False
 
 def _get_tlds():
     url = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt"
@@ -27,7 +69,7 @@ def _get_tlds():
 
 def _import_tlds():
     try:
-        with TLDS_LIST.open("r", encoding = "utf-8") as saved_tlds: return [tld.strip() for tld in saved_tlds]
+        with _TLDS_LIST.open("r", encoding = "utf-8") as saved_tlds: return [tld.strip() for tld in saved_tlds]
     except Exception as error:
         error_message(
             "Error al importar la lista de TLDs guardada localmente. No se podrá verificar la validez de las TLDs en los correos electrónicos, sino tan solo su sintaxis:",
@@ -38,7 +80,7 @@ def _import_tlds():
 
 def _export_tlds(tlds):
     try:
-        with TLDS_LIST.open("w", encoding = "utf-8") as saved_tlds: saved_tlds.write("\n".join(tlds))
+        with _TLDS_LIST.open("w", encoding = "utf-8") as saved_tlds: saved_tlds.write("\n".join(tlds))
     except Exception as error:
         error_message("Error al exportar la lista de TLDs:", error)
         wait_for_key()
@@ -89,8 +131,7 @@ def validate_string(
 
 def validate_integer(
     message = "Ingrese un número: ",
-    minimum_value = None,
-    maximum_value = None,
+    range = None,
     blank_error = "El número no puede estar vacío",
     invalid_error = "El número ingresado no es válido, intente nuevamente",
     range_error = "El número ingresado no se encuentra dentro del rango permitido, intente nuevamente"
@@ -104,7 +145,7 @@ def validate_integer(
         if pattern.match(integer):
             unformatted_integer = integer.replace(".", "")
             value = int(unformatted_integer)
-            if (minimum_value is not None and value < minimum_value) or (maximum_value is not None and value > maximum_value):
+            if not _is_in_range(value, range):
                 print(f"\n{range_error}\n", color = "#ff0000")
                 continue
             return value
@@ -112,22 +153,30 @@ def validate_integer(
 
 def validate_double(
     message = "Ingrese un número: ",
-    minimum_value = None,
-    maximum_value = None,
     blank_error = "El número no puede estar vacío",
     invalid_error = "El número ingresado no es válido, intente nuevamente",
+    range = None,
     range_error = "El número ingresado no se encuentra dentro del rango permitido, intente nuevamente"
 ):
-    pattern = re.compile(r"^-?(?:\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d{1,2}))?$")
+    pattern = re.compile(rf"^{_value_pattern}$")
     while True:
         double = input(text = message, bold = True)
         if not double:
             print(f"\n{blank_error}\n", color = "#ff0000")
             continue
         if pattern.match(double):
-            unformatted_double = double.replace(".", "").replace(",", ".")
-            value = float(unformatted_double)
-            if (minimum_value is not None and value < minimum_value) or (maximum_value is not None and value > maximum_value):
+            def parse_value(raw_value):
+                if raw_value.startswith("-"):
+                    sign = -1
+                    raw_value = raw_value[1:]
+                else: sign = 1
+                if raw_value in _MATHEMATICAL_CONSTANTS: return sign * _MATHEMATICAL_CONSTANTS[raw_value]
+                if "/" in raw_value:
+                    parts = raw_value.split("/")
+                    return sign * (parse_value(parts[0]) / parse_value(parts[1]))
+                return sign * float(raw_value.replace(".", "").replace(",", "."))
+            value = parse_value(double)
+            if not _is_in_range(value, range):
                 print(f"\n{range_error}\n", color = "#ff0000")
                 continue
             return value
@@ -141,11 +190,11 @@ def validate_datetime(
     include_time = True,
     include_second = True
 ):
-    date = r"(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])"
-    if include_year: date += r"/(\d{4}|\d{1,2}\.\d{3})"
-    time = r"([01]\d|2[0-3]):[0-5]\d"
-    if include_second: time += r"(?::[0-5]\d)?"
-    pattern = re.compile(rf"^{date}(?: - {time})?$" if include_time else rf"^{date}$")
+    date_pattern = r"(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])"
+    if include_year: date_pattern += r"/(\d{4}|\d{1,2}\.\d{3})"
+    time_pattern = r"([01]\d|2[0-3]):[0-5]\d"
+    if include_second: time_pattern += r"(?::[0-5]\d)?"
+    pattern = re.compile(rf"^{date_pattern}(?: - {time_pattern})?$" if include_time else rf"^{date_pattern}$")
     while True:
         datetime_string = input(text = message, bold = True)
         if not datetime_string:

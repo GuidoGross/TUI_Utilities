@@ -40,7 +40,7 @@ def _style(
                         current_segment = ""
                     styleable.append(" ")
                 else: current_segment += character
-            if current_segment: styleable.append(current_segment, style=style)
+            if current_segment: styleable.append(current_segment, style = style)
             return styleable
         elif isinstance(object, list):
             for segment, segment_style in object:

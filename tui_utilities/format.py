@@ -1,10 +1,10 @@
 def decimal_format(number, decimals = None):
     if isinstance(number, float) and number.is_integer(): number = int(number)
     if decimals is not None:
-        formated_number = f"{number:,.{decimals}f}"
-        if "." in formated_number: formated_number = formated_number.rstrip("0").rstrip(".")
-    else: formated_number = f"{number:,}"
-    return formated_number.replace(",", "X").replace(".", ",").replace("X", ".")
+        formatted_number = f"{number:,.{decimals}f}"
+        if "." in formatted_number: formatted_number = formatted_number.rstrip("0").rstrip(".")
+    else: formatted_number = f"{number:,}"
+    return formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
 
 def datetime_format(datetime, include_year = "automatic", include_time = "automatic", include_second = "automatic"):
     day = datetime.day
@@ -30,8 +30,8 @@ def id_format(id):
     elif len(id) == 7: return f"{id[0:1]}.{id[1:4]}.{id[4:7]}"
 
 def cellphone_number_format(cellphone_number):
-    formated_cellphone_number = "".join(filter(str.isdigit, cellphone_number))
-    return f"{formated_cellphone_number[0:4]} - {formated_cellphone_number[4:10]}"
+    formatted_cellphone_number = "".join(filter(str.isdigit, cellphone_number))
+    return f"{formatted_cellphone_number[0:4]} - {formatted_cellphone_number[4:10]}"
 
 def convert_to_double(number): return float(str(number).replace(".", "").replace(",", "."))
 
