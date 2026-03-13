@@ -16,36 +16,78 @@ _MATHEMATICAL_CONSTANTS = {
 }
 _value_pattern = r"(?:-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?)"
 _interval_pattern = rf"[\[\(]{_value_pattern}; {_value_pattern}[\]\)]"
-_numeric_range_pattern = re.compile(rf"^{_interval_pattern}(?: \| {_interval_pattern})*$")
+_range_item_pattern = rf"(?:{_interval_pattern}|{_value_pattern})"
+_numeric_range_pattern = re.compile(rf"^{_range_item_pattern}(?: \| {_range_item_pattern})*$")
 _extraction_pattern = re.compile(rf"(?P<left_type>[\[\(])(?P<left_value>{_value_pattern}); (?P<right_value>{_value_pattern})(?P<right_type>[\]\)])")
 _email_pattern = None
 
+def _parse_value(raw_value):
+    if raw_value.startswith("-"):
+        sign = -1
+        raw_value = raw_value[1:]
+    else: sign = 1
+    if raw_value == "infinity": return sign * float("inf")
+    if raw_value in _MATHEMATICAL_CONSTANTS: return sign * _MATHEMATICAL_CONSTANTS[raw_value]
+    if "/" in raw_value:
+        parts = raw_value.split("/")
+        return sign * (_parse_value(parts[0]) / _parse_value(parts[1]))
+    return sign * float(raw_value.replace(".", "").replace(",", "."))
+
+def _check_range_consistency(range_string):
+    if not range_string: return True
+    items = []
+    intervals = range_string.split(" | ")
+    for item_string in intervals:
+        match = _extraction_pattern.match(item_string)
+        if match:
+            items.append({
+                "type": "interval",
+                "left": _parse_value(match.group("left_value")),
+                "right": _parse_value(match.group("right_value")),
+                "left_inclusive": match.group("left_type") == "[",
+                "right_inclusive": match.group("right_type") == "]"
+            })
+        else:
+            items.append({
+                "type": "value",
+                "value": _parse_value(item_string)
+            })
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            item_1 = items[i]
+            item_2 = items[j]
+            if item_1["type"] == "value" and item_2["type"] == "value":
+                if item_1["value"] == item_2["value"]: return False
+            elif item_1["type"] == "value" or item_2["type"] == "value":
+                value_item = item_1 if item_1["type"] == "value" else item_2
+                interval_item = item_2 if item_1["type"] == "value" else item_1
+                value = value_item["value"]
+                in_left = (value >= interval_item["left"]) if interval_item["left_inclusive"] else (value > interval_item["left"])
+                in_right = (value <= interval_item["right"]) if interval_item["right_inclusive"] else (value < interval_item["right"])
+                if in_left and in_right: return False
+            else:
+                if item_1["right"] < item_2["left"]: continue
+                if item_1["right"] == item_2["left"] and not (item_1["right_inclusive"] and item_2["left_inclusive"]): continue
+                if item_2["right"] < item_1["left"]: continue
+                if item_2["right"] == item_1["left"] and not (item_2["right_inclusive"] and item_1["left_inclusive"]): continue
+                return False
+    return True
+
 def _is_in_range(value, range):
     if not range: return True
-    if not _numeric_range_pattern.match(range): return False
+    if not _numeric_range_pattern.match(range) or not _check_range_consistency(range): return False
     intervals = range.split(" | ")
     for interval in intervals:
         match = _extraction_pattern.match(interval)
-        if not match: continue
+        if not match:
+            if value == _parse_value(interval): return True
+            continue
         left_type = match.group("left_type")
         right_type = match.group("right_type")
         left_raw_value = match.group("left_value")
         right_raw_value = match.group("right_value")
-        
-        def parse_value(raw_value):
-            if raw_value.startswith("-"):
-                sign = -1
-                raw_value = raw_value[1:]
-            else: sign = 1
-            if raw_value == "infinity": return sign * float("inf")
-            if raw_value in _MATHEMATICAL_CONSTANTS: return sign * _MATHEMATICAL_CONSTANTS[raw_value]
-            if "/" in raw_value:
-                parts = raw_value.split("/")
-                return sign * (parse_value(parts[0]) / parse_value(parts[1]))
-            return sign * float(raw_value.replace(".", "").replace(",", "."))
-        
-        left_value = parse_value(left_raw_value)
-        right_value = parse_value(right_raw_value)
+        left_value = _parse_value(left_raw_value)
+        right_value = _parse_value(right_raw_value)
         if left_value > right_value: continue
         if left_raw_value == "-infinity" and left_type == "[": continue
         if right_raw_value == "infinity" and right_type == "]": continue
@@ -168,17 +210,7 @@ def validate_double(
             print(f"\n{blank_error}\n", color = "#ff0000")
             continue
         if pattern.match(double):
-            def parse_value(raw_value):
-                if raw_value.startswith("-"):
-                    sign = -1
-                    raw_value = raw_value[1:]
-                else: sign = 1
-                if raw_value in _MATHEMATICAL_CONSTANTS: return sign * _MATHEMATICAL_CONSTANTS[raw_value]
-                if "/" in raw_value:
-                    parts = raw_value.split("/")
-                    return sign * (parse_value(parts[0]) / parse_value(parts[1]))
-                return sign * float(raw_value.replace(".", "").replace(",", "."))
-            value = parse_value(double)
+            value = _parse_value(double)
             if not _is_in_range(value, range):
                 print(f"\n{range_error}\n", color = "#ff0000")
                 continue
