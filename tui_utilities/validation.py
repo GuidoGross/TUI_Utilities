@@ -14,7 +14,7 @@ _MATHEMATICAL_CONSTANTS = {
     "tau": math.tau,
     "phi": (1 + 5 ** 0.5) / 2
 }
-_value_pattern = r"-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?"
+_value_pattern = r"(?:-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?)"
 _interval_pattern = rf"[\[\(]{_value_pattern}; {_value_pattern}[\]\)]"
 _numeric_range_pattern = re.compile(rf"^{_interval_pattern}(?: \| {_interval_pattern})*$")
 _extraction_pattern = re.compile(rf"(?P<left_type>[\[\(])(?P<left_value>{_value_pattern}); (?P<right_value>{_value_pattern})(?P<right_type>[\]\)])")
