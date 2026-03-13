@@ -1,6 +1,6 @@
 [project]
 name = "tui_utilities"
-version = "1.7.8"
+version = "1.7.9"
 description = "Personal-use console utilities library"
 readme = "README.md"
 license = {file = "LICENSE"}

@@ -84,9 +84,9 @@ Interactive validation utilities for user input.
 
 - validate_string(): ensures non-empty string input.
 
-- validate_integer(): validates integers (uses Continental European numeric format) with optional range validation through an advanced syntax (syntax example: "[-infinity; 5] | [10; infinity]").
+- validate_integer(): validates integers (uses Continental European numeric format) with optional range validation through an advanced syntax (syntax example: "(-infinity; 5] | [10; infinity)").
 
-- validate_double(): validates decimal numbers (uses Continental European numeric format) with support for fractions and mathematical constants ("pi", "e", "tau", "phi") and optional range validation through an advanced syntax (syntax example: "[-infinity; pi] | [10,5; infinity]").
+- validate_double(): validates decimal numbers (uses Continental European numeric format) with support for fractions and mathematical constants ("pi", "e", "tau", "phi") and optional range validation through an advanced syntax (syntax example: "(-infinity; pi] | [10,5; infinity)").
 
 - validate_datetime(): validates date and time input (uses Day–Month–Year date format with 24-hour time) with selectable year, time and second inclusion.
 

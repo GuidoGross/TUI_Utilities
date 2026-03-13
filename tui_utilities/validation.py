@@ -46,6 +46,8 @@ def _is_in_range(value, range):
         left_value = parse_value(left_raw_value)
         right_value = parse_value(right_raw_value)
         if left_value > right_value: continue
+        if left_raw_value == "-infinity" and left_type == "[": continue
+        if right_raw_value == "infinity" and right_type == "]": continue
         in_left = (value >= left_value) if left_type == "[" else (value > left_value)
         in_right = (value <= right_value) if right_type == "]" else (value < right_value)
         if in_left and in_right: return True
