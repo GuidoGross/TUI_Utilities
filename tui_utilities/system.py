@@ -1,8 +1,7 @@
-import subprocess
 import ctypes
 import locale
 
-def set_window_title(title): subprocess.run(f"title {title}", shell = True)
+def set_window_title(title): ctypes.windll.kernel32.SetConsoleTitleW(title)
 
 def maximize_window(): ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 3)
 
