@@ -15,8 +15,9 @@ _MATHEMATICAL_CONSTANTS = {
     "phi": (1 + 5 ** 0.5) / 2
 }
 _value_pattern = r"-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?"
-_raw_numeric_range_pattern = rf"(?P<left_type>[\[\(])(?P<left_value>{_value_pattern}); (?P<right_value>{_value_pattern})(?P<right_type>[\]\)])"
-_numeric_range_pattern = re.compile(rf"^{_raw_numeric_range_pattern}(?: \| {_raw_numeric_range_pattern})*$")
+_interval_pattern = rf"[\[\(]{_value_pattern}; {_value_pattern}[\]\)]"
+_numeric_range_pattern = re.compile(rf"^{_interval_pattern}(?: \| {_interval_pattern})*$")
+_extraction_pattern = re.compile(rf"(?P<left_type>[\[\(])(?P<left_value>{_value_pattern}); (?P<right_value>{_value_pattern})(?P<right_type>[\]\)])")
 _email_pattern = None
 
 def _is_in_range(value, range):
@@ -24,7 +25,7 @@ def _is_in_range(value, range):
     if not _numeric_range_pattern.match(range): return False
     intervals = range.split(" | ")
     for interval in intervals:
-        match = re.match(_raw_numeric_range_pattern, interval)
+        match = _extraction_pattern.match(interval)
         if not match: continue
         left_type = match.group("left_type")
         right_type = match.group("right_type")
