@@ -103,7 +103,7 @@ Windows 10 or higher
 - **set_window_title():** sets the console window title.
 - **maximize_window():** maximizes the console window.
 - **set_locale():** configures the process locale for number, date, and cultural formatting.
-- **resources_path():** returns the absolute path to the resources directory, regardless of whether the program is running as a script in an IDE or as an executable.
+- **get_resources_path():** returns the absolute path to the resources directory, regardless of whether the program is running as a script in an IDE or as an executable.
 
 ---
 
