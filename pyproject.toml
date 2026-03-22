@@ -1,16 +1,16 @@
 [project]
 name = "tui_utilities"
-version = "1.7.12"
+version = "1.8.0"
 description = "Personal-use console utilities library"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [{name = "Guido Iván Gross", email = "grossguidoivan@gmail.com"}]
-requires-python = ">=3.8"
-dependencies = ["rich", "readchar", "requests"]
+requires-python = ">=3.9"
+dependencies = ["rich>=12.4.4", "readchar>=4.0.0", "requests>=2.25.0"]
 
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries",
 ]

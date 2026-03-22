@@ -2,7 +2,6 @@ from .console import print, input, wait_for_key
 from .structure import error_message
 from importlib.resources import files
 import math
-import requests
 import re
 from datetime import datetime
 
@@ -97,6 +96,7 @@ def _is_in_range(value, range):
     return False
 
 def _get_tlds():
+    import requests
     url = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt"
     try:
         response = requests.get(url, timeout = 10)

@@ -10,5 +10,5 @@ __all__ = [
     "check_if_list_is_empty", "validate_option", "validate_string", "validate_integer", "validate_double",
     "validate_datetime", "validate_id", "validate_cellphone_number", "validate_email",
     "decimal_format", "datetime_format", "id_format", "cellphone_number_format",
-    "set_window_title", "maximize_window", "set_locale"
+    "set_window_title", "maximize_window", "set_locale", "resources_path"
 ]

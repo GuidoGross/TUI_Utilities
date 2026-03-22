@@ -1,135 +1,118 @@
-# TUI Utilities
+# **TUI Utilities**
 
 Personal-use console utilities library providing styled terminal interaction, structured menus, robust input validation, formatting helpers, and Spanish-oriented user experience.
 
 ---
 
-## Purpose
+## **Purpose**
 
-This library is designed for console-based applications that need:
+**This library is designed for console-based applications that need:**
 
 - Clean TUI
-
 - Structured Spanish-language user interaction
-
 - Robust validation
-
 - Consistent formatting
 
 ---
 
-## Dependencies
+## **Requirements**
 
-Standard library modules are used where possible; only external dependencies are listed:
+### **Dependencies**
 
-- rich
+**Standard library modules are used where possible; only external dependencies are listed:**
 
-- readchar
-
-- requests
-
----
-
-## Features
+- rich (12.4.4 or higher)
+- readchar (4.0.0 or higher)
+- requests (2.25.0 or higher)
 
 ---
 
-### Console Utilities (console)
+### **Python version**
 
-Styled terminal interaction built on rich:
+Python 3.9 or higher
+  
+---
 
-- print(): styled print function built on rich, supporting text styles, alignment, padding, and per-segment styling.
+### **Operating System**
 
-- input(): styled input function built on rich, supporting text styles and automatically trimming whitespaces.
-
-- clear_console(): clears the terminal screen.
-
-- wait_for_key(): pauses execution until the user presses a key.
+Windows 10 or higher
 
 ---
 
-### Structure Utilities (structure)
+## **Features**
 
-Tools for building structures in console applications:
+### **Console Utilities (console)**
 
-- header(): prints a styled header, consisting of a title and a separator.
+**Styled terminal interaction built on rich:**
 
-- menu(): creates interactive selection menus with header and automatic selection validation.
+- **print():** styled print function built on rich, supporting text styles, alignment, padding, and per-segment styling.
+- **input():** styled input function built on rich, supporting text styles and automatically trimming whitespaces.
+- **clear_console():** clears the terminal screen.
+- **wait_for_key():** pauses execution until the user presses a key.
 
-- confirmation_menu(): creates a confirmation dialog with custom message and options.
+---
 
-- confirm_exit(): creates a confirmation dialog that exits the program safely (uses confirmation_menu()).
+### **Structure Utilities (structure)**
 
-- table(): creates personalized tables with easy introduction of fully-styled columns and rows.
+**Tools for building structures in console applications:**
 
-- separator(): prints a fully-personalized visual separator line.
-
-- error_message(): displays formatted error information including:
-
+- **header():** prints a styled header, consisting of a title and a separator.
+- **menu():** creates interactive selection menus with header and automatic selection validation.
+- **confirmation_menu():** creates a confirmation dialog with custom message and options.
+- **confirm_exit():** creates a confirmation dialog that exits the program safely (uses confirmation_menu()).
+- **table():** creates personalized tables with easy introduction of fully-styled columns and rows.
+- **separator():** prints a fully-personalized visual separator line.
+- **error_message():** displays formatted error information including:
     - Custom message
-
     - Exception details
-
     - Full traceback
 
 ---
 
-### Input Validation (validation)
+### **Input Validation (validation)**
 
-Interactive validation utilities for user input.
+**Interactive validation utilities for user input:**
 
-- check_if_list_is_empty(): checks if a list is empty and displays an error screen if it is.
-
-- validate_option(): validates user selection from a dictionary of options.
-
-- validate_string(): ensures non-empty string input.
-
-- validate_integer(): validates integers (uses Continental European numeric format) with optional range validation through an advanced syntax (syntax example: "(-infinity; 0] | 5 | [10; infinity)").
-
-- validate_double(): validates decimal numbers (uses Continental European numeric format) with support for fractions and mathematical constants ("pi", "e", "tau", "phi") and optional range validation through an advanced syntax (syntax example: "(-infinity; 0,1] | 1/3 | [pi; infinity)").
-
-- validate_datetime(): validates date and time input (uses Day–Month–Year date format with 24-hour time) with selectable year, time and second inclusion.
-
-- validate_id(): validates Argentinian national ID numbers.
-
-- validate_cellphone_number(): validates cellphone numbers (uses Argentinian format).
-
-- validate_email(): validates e-mail addresses using an official TLDs list (from IANA's website) or syntax fallback (in case of not having an internet connection or a locally imported list of TLDs).
+- **check_if_list_is_empty():** checks if a list is empty and displays an error screen if it is.
+- **validate_option():** validates user selection from a dictionary of options.
+- **validate_string():** ensures non-empty string input.
+- **validate_integer():** validates integers (uses Continental European numeric format) with optional range validation through an advanced syntax (syntax example: "(-infinity; 0] | 5 | [10; infinity)").
+- **validate_double():** validates decimal numbers (uses Continental European numeric format) with support for fractions and mathematical constants ("pi", "e", "tau", "phi") and optional range validation through an advanced syntax (syntax example: "(-infinity; 0,1] | 1/3 | [pi; infinity)").
+- **validate_datetime():** validates date and time input (uses Day–Month–Year date format with 24-hour time) with selectable year, time and second inclusion.
+- **validate_id():** validates Argentinian national ID numbers.
+- **validate_cellphone_number():** validates cellphone numbers (uses Argentinian format).
+- **validate_email():** validates e-mail addresses using an official TLDs list (from IANA's website) or syntax fallback (in case of not having an internet connection or a locally imported list of TLDs).
 
 ---
 
-### Formatting Helpers (format)
+### **Formatting Helpers (format)**
 
-Utilities for applying consistent formatting:
+**Utilities for applying consistent formatting:**
 
-- decimal_format(): applies Continental European numeric formatting.
-
-- datetime_format(): formats datetime objects (uses Day–Month–Year date format with 24-hour time) with automatic or custom year, time and second inclusion.
-
-- id_format(): formats Argentinian national ID numbers.
-
-- cellphone_number_format(): formats cellphone numbers (uses Argentinian format).
+- **decimal_format():** applies Continental European numeric formatting.
+- **datetime_format():** formats datetime objects (uses Day–Month–Year date format with 24-hour time) with automatic or custom year, time and second inclusion.
+- **id_format():** formats Argentinian national ID numbers.
+- **cellphone_number_format():** formats cellphone numbers (uses Argentinian format).
 
 ---
 
-### System Utilities (system)
+### **System Utilities (system)**
 
-Helpers for interacting with the operating system console environment:
+**Helpers for interacting with the operating system console environment:**
 
-- set_window_title(): sets the console window title.
-
-- maximize_window(): maximizes the console window.
-
-- set_locale(): configures the process locale for number, date, and cultural formatting.
+- **set_window_title():** sets the console window title.
+- **maximize_window():** maximizes the console window.
+- **set_locale():** configures the process locale for number, date, and cultural formatting.
+- **resources_path():** returns the absolute path to the resources directory, regardless of whether the program is running as a script in an IDE or as an executable.
 
 ---
 
-## Installation
+## **Installation**
 
 pip install tui_utilities
 
 ---
 
-## Update
+## **Update**
 
 pip install -U tui_utilities
