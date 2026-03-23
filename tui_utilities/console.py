@@ -140,7 +140,7 @@ def input(
 ):
     if _IN_GOOGLE_COLABORATORY:
         while text.startswith("\n"):
-            print("")
+            print(" ")
             text = text[1:]
     return _CONSOLE.input(_style(
         object = text,
