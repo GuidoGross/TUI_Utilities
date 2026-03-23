@@ -185,4 +185,9 @@ def wait_for_key(
         left_padding = left_padding,
         end = ""
     )
-    readchar.readkey()
+    if _IN_GOOGLE_COLABORATORY:
+        import builtins
+        import time
+        time.sleep(0.1)
+        builtins.input()
+    else: readchar.readkey()
