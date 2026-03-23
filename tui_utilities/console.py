@@ -7,7 +7,7 @@ from rich.padding import Padding
 import subprocess
 import readchar
 
-if _IN_GOOGLE_COLABORATORY: os.environ["COLUMNS"] = "150"
+if _IN_GOOGLE_COLABORATORY: os.environ["COLUMNS"] = "152"
 
 def _style(
     object,
@@ -140,7 +140,7 @@ def input(
 ):
     if _IN_GOOGLE_COLABORATORY:
         while text.startswith("\n"):
-            print()
+            print("")
             text = text[1:]
     return _CONSOLE.input(_style(
         object = text,
