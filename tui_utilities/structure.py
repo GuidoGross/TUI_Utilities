@@ -1,4 +1,5 @@
-from .console import print, clear_console, wait_for_key, _CONSOLE
+from .console import print, clear_console, wait_for_key
+from .constants import _CONSOLE
 from rich.table import Table
 from rich import box
 import sys

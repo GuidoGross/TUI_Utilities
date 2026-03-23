@@ -1,11 +1,13 @@
-from rich.console import Console, RenderableType
+from .constants import _IN_GOOGLE_COLABORATORY, _CONSOLE
+import os
+from rich.console import RenderableType
 from rich.text import Text
 from rich.align import Align
 from rich.padding import Padding
 import subprocess
 import readchar
 
-_CONSOLE = Console()
+if _IN_GOOGLE_COLABORATORY: os.environ["COLUMNS"] = "150"
 
 def _style(
     object,
@@ -146,7 +148,11 @@ def input(
         reverse = reverse
     )).strip()
 
-def clear_console(): subprocess.run("cls", shell = True)
+def clear_console():
+    if _IN_GOOGLE_COLABORATORY:
+        from IPython.display import clear_output
+        clear_output(wait = True)
+    else: subprocess.run("cls" if os.name == "nt" else "clear", shell = True)
 
 def wait_for_key(
     text = "Pulse cualquier tecla para continuar...",

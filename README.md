@@ -25,17 +25,21 @@ Personal-use console utilities library providing styled terminal interaction, st
 - readchar (4.0.0 or higher)
 - requests (2.25.0 or higher)
 
----
-
 ### **Python version**
 
-Python 3.9 or higher
-  
----
+Python (3.9 or higher)
 
 ### **Operating System**
 
-Windows 10 or higher
+**Any of the following:**
+
+- Windows (10 or higher)
+- Linux (any modern Linux distribution compatible with Python 3.9)
+- MacOS (10.9 or higher)
+  
+### **Google Colaboratory support**
+
+This library is fully compatible with Google Colaboratory.
 
 ---
 
@@ -49,8 +53,6 @@ Windows 10 or higher
 - **input():** styled input function built on rich, supporting text styles and automatically trimming whitespaces.
 - **clear_console():** clears the terminal screen.
 - **wait_for_key():** pauses execution until the user presses a key.
-
----
 
 ### **Structure Utilities (structure)**
 
@@ -67,8 +69,6 @@ Windows 10 or higher
     - Exception details
     - Full traceback
 
----
-
 ### **Input Validation (validation)**
 
 **Interactive validation utilities for user input:**
@@ -83,8 +83,6 @@ Windows 10 or higher
 - **validate_cellphone_number():** validates cellphone numbers (uses Argentinian format).
 - **validate_email():** validates e-mail addresses using an official TLDs list (from IANA's website) or syntax fallback (in case of not having an internet connection or a locally imported list of TLDs).
 
----
-
 ### **Formatting Helpers (format)**
 
 **Utilities for applying consistent formatting:**
@@ -93,8 +91,6 @@ Windows 10 or higher
 - **datetime_format():** formats datetime objects (uses Day–Month–Year date format with 24-hour time) with automatic or custom year, time and second inclusion.
 - **id_format():** formats Argentinian national ID numbers.
 - **cellphone_number_format():** formats cellphone numbers (uses Argentinian format).
-
----
 
 ### **System Utilities (system)**
 

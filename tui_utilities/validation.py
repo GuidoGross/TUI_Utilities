@@ -1,11 +1,9 @@
 from .console import print, input, wait_for_key
 from .structure import error_message
-from importlib.resources import files
 import math
+from importlib.resources import files
 import re
 from datetime import datetime
-
-_TLDS_LIST = files("tui_utilities._tlds").joinpath("tlds.txt")
 
 _MATHEMATICAL_CONSTANTS = {
     "pi": math.pi,
@@ -13,11 +11,13 @@ _MATHEMATICAL_CONSTANTS = {
     "tau": math.tau,
     "phi": (1 + 5 ** 0.5) / 2
 }
-_value_pattern = r"(?:-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?)"
-_interval_pattern = rf"[\[\(]{_value_pattern}; {_value_pattern}[\]\)]"
-_range_item_pattern = rf"(?:{_interval_pattern}|{_value_pattern})"
-_numeric_range_pattern = re.compile(rf"^{_range_item_pattern}(?: \| {_range_item_pattern})*$")
-_extraction_pattern = re.compile(rf"(?P<left_type>[\[\(])(?P<left_value>{_value_pattern}); (?P<right_value>{_value_pattern})(?P<right_type>[\]\)])")
+_TLDS_LIST = files("tui_utilities._tlds").joinpath("tlds.txt")
+_VALUE_PATTERN = r"(?:-?infinity|-?pi|-?e|-?tau|-?phi|-?\d+(?:\.\d+)?(?:,\d+)?(?:/-?\d+(?:\.\d+)?(?:,\d+)?)?)"
+_INTERVAL_PATTERN = rf"[\[\(]{_VALUE_PATTERN}; {_VALUE_PATTERN}[\]\)]"
+_RANGE_ITEM_PATTERN = rf"(?:{_INTERVAL_PATTERN}|{_VALUE_PATTERN})"
+_NUMERIC_RANGE_PATTERN = re.compile(rf"^{_RANGE_ITEM_PATTERN}(?: \| {_RANGE_ITEM_PATTERN})*$")
+_EXTRACTION_PATTERN = re.compile(rf"(?P<left_type>[\[\(])(?P<left_value>{_VALUE_PATTERN}); (?P<right_value>{_VALUE_PATTERN})(?P<right_type>[\]\)])")
+
 _email_pattern = None
 
 def _parse_value(raw_value):
@@ -37,7 +37,7 @@ def _check_range_consistency(range_string):
     items = []
     intervals = range_string.split(" | ")
     for item_string in intervals:
-        match = _extraction_pattern.match(item_string)
+        match = _EXTRACTION_PATTERN.match(item_string)
         if match:
             items.append({
                 "type": "interval",
@@ -74,10 +74,10 @@ def _check_range_consistency(range_string):
 
 def _is_in_range(value, range):
     if not range: return True
-    if not _numeric_range_pattern.match(range) or not _check_range_consistency(range): return False
+    if not _NUMERIC_RANGE_PATTERN.match(range) or not _check_range_consistency(range): return False
     intervals = range.split(" | ")
     for interval in intervals:
-        match = _extraction_pattern.match(interval)
+        match = _EXTRACTION_PATTERN.match(interval)
         if not match:
             if value == _parse_value(interval): return True
             continue
@@ -203,7 +203,7 @@ def validate_double(
     range = None,
     range_error = "El número ingresado no se encuentra dentro del rango permitido, intente nuevamente"
 ):
-    pattern = re.compile(rf"^{_value_pattern}$")
+    pattern = re.compile(rf"^{_VALUE_PATTERN}$")
     while True:
         double = input(text = message, bold = True)
         if not double:
