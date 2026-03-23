@@ -54,7 +54,7 @@ function update_tlds_list {
 }
 
 function build_package {
-    Write-Host "${bold}${italic}[2/5]${/italic} Construyendo paquete con build...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[2/5]${/italic} Construyendo paquete...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     python -m build
     $duration = (Get-Date) - $current_step_start_time
@@ -63,32 +63,32 @@ function build_package {
 }
 
 function upload_library_to_pypi {
-    Write-Host "${bold}${italic}[3/5]${/italic} Subiendo a PyPI con twine...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[3/5]${/italic} Subiendo la librería a PyPI...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     twine upload dist/*
     $duration = (Get-Date) - $current_step_start_time
-    Write-Host "${bold}Carga a PyPI completada en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
+    Write-Host "${bold}Librería subida a PyPI en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
     separator
 }
 
 function delete_temporary_files {
-    Write-Host "${bold}${italic}[4/5]${/italic} Eliminando archivos temporales y residuos...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[4/5]${/italic} Eliminando archivos residuales...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     $folders_to_delete = @("dist", "build")
     Get-ChildItem -Path $base_path -Filter "*.egg-info" -Directory | ForEach-Object { $folders_to_delete += $_.FullName }
     $folders_to_delete | ForEach-Object { if (Test-Path $_) { Remove-Item -Path $_ -Recurse -Force -ErrorAction SilentlyContinue } }
     $duration = (Get-Date) - $current_step_start_time
-    Write-Host "${bold}Residuos eliminados en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
+    Write-Host "${bold}Archivos residuales eliminados en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
     separator
 }
 
 function update_library {
-    Write-Host "${bold}${italic}[5/5]${/italic} Actualizando tui_utilities localmente...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[5/5]${/italic} Actualizando librería localmente...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     pip install -U tui_utilities
     pip install -U tui_utilities
     $duration = (Get-Date) - $current_step_start_time
-    Write-Host "${bold}Actualización completada en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
+    Write-Host "${bold}Librería actualizada en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
     separator
 }
 

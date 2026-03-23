@@ -138,6 +138,10 @@ def input(
     strike = False,
     reverse = False
 ):
+    if _IN_GOOGLE_COLABORATORY:
+        while text.startswith("\n"):
+            print()
+            text = text[1:]
     return _CONSOLE.input(_style(
         object = text,
         color = color,
