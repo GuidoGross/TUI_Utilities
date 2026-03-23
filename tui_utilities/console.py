@@ -139,9 +139,13 @@ def input(
     reverse = False
 ):
     if _IN_GOOGLE_COLABORATORY:
+        import time
+        import builtins
+        time.sleep(0.1)
         while text.startswith("\n"):
             print(" ")
             text = text[1:]
+        return builtins.input(text).strip()
     return _CONSOLE.input(_style(
         object = text,
         color = color,
@@ -159,7 +163,7 @@ def clear_console():
     else: subprocess.run("cls" if os.name == "nt" else "clear", shell = True)
 
 def wait_for_key(
-    text = "Pulse cualquier tecla para continuar...",
+    text = "Pulse cualquier tecla para continuar..." if not _IN_GOOGLE_COLABORATORY else "Pulse \"Enter\" para continuar...",
     color = "#ffffff",
     bold = True,
     italic = True,
