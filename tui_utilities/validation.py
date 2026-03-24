@@ -222,7 +222,7 @@ def validate_double(
             return value
         print(f"\n{invalid_error}\n", color = "#ff0000")
 
-def validate_datetime(
+def validate_date_time(
     message = "Ingrese una fecha: ",
     blank_error = "La fecha no puede estar vacía",
     invalid_error = "La fecha ingresada no es válida, intente nuevamente",
@@ -237,18 +237,18 @@ def validate_datetime(
     if include_time: pattern = re.compile(rf"^{date_pattern} - {time_pattern}$")
     else: pattern = re.compile(rf"^{date_pattern}$")
     while True:
-        datetime_string = input(text = message, bold = True)
-        if not datetime_string:
+        date_time_string = input(text = message, bold = True)
+        if not date_time_string:
             print(f"\n{blank_error}\n", color = "#ff0000")
             continue
-        if pattern.match(datetime_string):
-            cleaned_datetime = datetime_string.replace(".", "")
-            if " - " in cleaned_datetime:
-                if cleaned_datetime.count(":") == 2:
+        if pattern.match(date_time_string):
+            cleaned_date_time = date_time_string.replace(".", "")
+            if " - " in cleaned_date_time:
+                if cleaned_date_time.count(":") == 2:
                     current_format = "%d/%m/%Y - %H:%M:%S" if include_year else "%d/%m - %H:%M:%S"
                 else: current_format = "%d/%m/%Y - %H:%M" if include_year else "%d/%m - %H:%M"
             else: current_format = "%d/%m/%Y" if include_year else "%d/%m"
-            return datetime.strptime(cleaned_datetime, current_format)
+            return datetime.strptime(cleaned_date_time, current_format)
         print(f"\n{invalid_error}\n", color = "#ff0000")
 
 def validate_id(

@@ -6,18 +6,18 @@ def decimal_format(number, decimals = None):
     else: formatted_number = f"{number:,}"
     return formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
 
-def datetime_format(
-    datetime,
+def date_time_format(
+    date_time,
     include_year = "automatic",
     include_time = "automatic",
     include_second = "automatic"
 ):
-    day = datetime.day
-    month = datetime.month
-    year = decimal_format(datetime.year)
-    hour = getattr(datetime, "hour", 0)
-    minute = getattr(datetime, "minute", 0)
-    second = getattr(datetime, "second", 0)
+    day = date_time.day
+    month = date_time.month
+    year = decimal_format(date_time.year)
+    hour = getattr(date_time, "hour", 0)
+    minute = getattr(date_time, "minute", 0)
+    second = getattr(date_time, "second", 0)
     if include_year == "automatic": include_year = True
     if include_time == "automatic": include_time = (hour != 0 or minute != 0 or second != 0)
     if include_second == "automatic": include_second = (second != 0)
