@@ -33,8 +33,8 @@ Python (3.9 or higher)
 
 **Any of the following:**
 
-- Windows (10 or higher)
-- Linux (any modern Linux distribution compatible with Python 3.9)
+- Windows (8 or higher)
+- Linux (any modern Linux distribution with glibc 2.34 or higher)
 - MacOS (10.9 or higher)
   
 ### **Google Colaboratory support**
