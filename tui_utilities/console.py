@@ -1,4 +1,5 @@
-from .constants import _IN_GOOGLE_COLABORATORY, _CONSOLE
+from .system import in_google_colaboratory
+from .constants import _CONSOLE
 import os
 from rich.console import RenderableType
 from rich.text import Text
@@ -109,7 +110,7 @@ def print(
     **kwargs
 ):
     objects = list(objects)
-    if _IN_GOOGLE_COLABORATORY and objects and isinstance(objects[0], str):
+    if in_google_colaboratory() and objects and isinstance(objects[0], str):
         import builtins
         while objects[0].startswith("\n"):
             builtins.print(" ")
@@ -142,7 +143,7 @@ def input(
     strike = False,
     reverse = False
 ):
-    if _IN_GOOGLE_COLABORATORY:
+    if in_google_colaboratory():
         import time
         import builtins
         time.sleep(0.1)
@@ -161,13 +162,13 @@ def input(
     )).strip()
 
 def clear_console():
-    if _IN_GOOGLE_COLABORATORY:
+    if in_google_colaboratory():
         from IPython.display import clear_output
         clear_output(wait = True)
     else: subprocess.run("cls" if os.name == "nt" else "clear", shell = True)
 
 def wait_for_key(
-    text = "Pulse cualquier tecla para continuar..." if not _IN_GOOGLE_COLABORATORY else "Pulse \"Enter\" para continuar...",
+    text = None,
     color = "#ffffff",
     bold = True,
     italic = True,
@@ -181,6 +182,8 @@ def wait_for_key(
     bottom_padding = None,
     left_padding = None
 ):
+    if text is None:
+        text = "Pulse \"Enter\" para continuar..." if in_google_colaboratory() else "Pulse cualquier tecla para continuar..."
     print(
         f"\n{text}",
         color = color,
@@ -197,7 +200,7 @@ def wait_for_key(
         left_padding = left_padding,
         end = ""
     )
-    if _IN_GOOGLE_COLABORATORY:
+    if in_google_colaboratory():
         import builtins
         import time
         time.sleep(0.1)

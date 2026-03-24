@@ -100,6 +100,7 @@ This library is fully compatible with Google Colaboratory.
 - **maximize_window():** maximizes the console window.
 - **set_locale():** configures the process locale for number, date, and cultural formatting.
 - **get_resources_path():** returns the absolute path to the resources directory, regardless of whether the program is running as a script in an IDE or as an executable.
+- **in_google_colaboratory():** returns True if the program is running in Google Colaboratory, False otherwise.
 
 ---
 
