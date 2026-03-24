@@ -7,8 +7,6 @@ from rich.padding import Padding
 import subprocess
 import readchar
 
-if _IN_GOOGLE_COLABORATORY: os.environ["COLUMNS"] = "152"
-
 def _style(
     object,
     color = "#ffffff",
