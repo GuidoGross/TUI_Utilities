@@ -2,4 +2,4 @@ from rich.console import Console
 import sys
 
 _IN_GOOGLE_COLABORATORY = "google.colab" in sys.modules or "ipykernel" in sys.modules
-_CONSOLE = Console(width = 151 if _IN_GOOGLE_COLABORATORY else None)
+_CONSOLE = Console(width = 150 if _IN_GOOGLE_COLABORATORY else None)
