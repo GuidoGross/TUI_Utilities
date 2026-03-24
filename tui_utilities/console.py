@@ -110,6 +110,12 @@ def print(
     end = "\n",
     **kwargs
 ):
+    objects = list(objects)
+    if _IN_GOOGLE_COLABORATORY and objects and isinstance(objects[0], str):
+        import builtins
+        while objects[0].startswith("\n"):
+            builtins.print(" ")
+            objects[0] = objects[0][1:]
     renderables = []
     for object in objects:
         renderables.append(_style(
