@@ -183,7 +183,8 @@ def wait_for_key(
     left_padding = None
 ):
     if text is None:
-        text = "Pulse \"Enter\" para continuar..." if in_google_colaboratory() else "Pulse cualquier tecla para continuar..."
+        if in_google_colaboratory(): text = "Pulse \"Enter\" para continuar..."
+        else: text = "Pulse cualquier tecla para continuar..."
     print(
         f"\n{text}",
         color = color,

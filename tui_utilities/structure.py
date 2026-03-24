@@ -230,12 +230,47 @@ def table(
     minimum_width = None,
     expand = False
 ):
-    title_style = _get_style_string(title_color, title_bold, title_italic, title_underline, title_strike, title_reverse)
+    title_style = _get_style_string(
+        title_color,
+        title_bold,
+        title_italic,
+        title_underline,
+        title_strike,
+        title_reverse
+    )
     style = _get_style_string(color, bold, italic, underline, strike, reverse)
-    caption_style = _get_style_string(caption_color, caption_bold, caption_italic, caption_underline, caption_strike, caption_reverse)
-    header_style = _get_style_string(header_color, header_bold, header_italic, header_underline, header_strike, header_reverse)
-    footer_style = _get_style_string(footer_color, footer_bold, footer_italic, footer_underline, footer_strike, footer_reverse)
-    border_style = _get_style_string(border_color, border_bold, border_italic, border_underline, border_strike, border_reverse)
+    caption_style = _get_style_string(
+        caption_color,
+        caption_bold,
+        caption_italic,
+        caption_underline,
+        caption_strike,
+        caption_reverse
+    )
+    header_style = _get_style_string(
+        header_color,
+        header_bold,
+        header_italic,
+        header_underline,
+        header_strike,
+        header_reverse
+    )
+    footer_style = _get_style_string(
+        footer_color,
+        footer_bold,
+        footer_italic,
+        footer_underline,
+        footer_strike,
+        footer_reverse
+    )
+    border_style = _get_style_string(
+        border_color,
+        border_bold,
+        border_italic,
+        border_underline,
+        border_strike,
+        border_reverse
+    )
     row_styles = None
     if row_colors or row_bolds or row_italics or row_underlines or row_strikes or row_reverses:
         from itertools import zip_longest

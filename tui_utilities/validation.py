@@ -61,14 +61,18 @@ def _check_range_consistency(range_string):
                 value_item = item_1 if item_1["type"] == "value" else item_2
                 interval_item = item_2 if item_1["type"] == "value" else item_1
                 value = value_item["value"]
-                in_left = (value >= interval_item["left"]) if interval_item["left_inclusive"] else (value > interval_item["left"])
-                in_right = (value <= interval_item["right"]) if interval_item["right_inclusive"] else (value < interval_item["right"])
+                if interval_item["left_inclusive"]: in_left = value >= interval_item["left"]
+                else: in_left = value > interval_item["left"]
+                if interval_item["right_inclusive"]: in_right = value <= interval_item["right"]
+                else: in_right = value < interval_item["right"]
                 if in_left and in_right: return False
             else:
                 if item_1["right"] < item_2["left"]: continue
-                if item_1["right"] == item_2["left"] and not (item_1["right_inclusive"] and item_2["left_inclusive"]): continue
+                if item_1["right"] == item_2["left"] and not (item_1["right_inclusive"] and item_2["left_inclusive"]):
+                    continue
                 if item_2["right"] < item_1["left"]: continue
-                if item_2["right"] == item_1["left"] and not (item_2["right_inclusive"] and item_1["left_inclusive"]): continue
+                if item_2["right"] == item_1["left"] and not (item_2["right_inclusive"] and item_1["left_inclusive"]):
+                    continue
                 return False
     return True
 
@@ -114,7 +118,8 @@ def _get_tlds():
 
 def _import_tlds():
     try:
-        with _TLDS_LIST.open("r", encoding = "utf-8") as saved_tlds: return [tld.strip() for tld in saved_tlds]
+        with _TLDS_LIST.open("r", encoding = "utf-8") as saved_tlds:
+            return [tld.strip() for tld in saved_tlds]
     except Exception as error:
         error_message(
             "Error al importar la lista de TLDs guardada localmente. No se podrá verificar la validez de las TLDs en los correos electrónicos, sino tan solo su sintaxis:",
@@ -229,7 +234,8 @@ def validate_datetime(
     if include_year: date_pattern += r"/(\d{4}|\d{1,2}\.\d{3})"
     time_pattern = r"([01]\d|2[0-3]):[0-5]\d"
     if include_second: time_pattern += r"(?::[0-5]\d)?"
-    pattern = re.compile(rf"^{date_pattern}(?: - {time_pattern})?$" if include_time else rf"^{date_pattern}$")
+    if include_time: pattern = re.compile(rf"^{date_pattern} - {time_pattern}$")
+    else: pattern = re.compile(rf"^{date_pattern}$")
     while True:
         datetime_string = input(text = message, bold = True)
         if not datetime_string:

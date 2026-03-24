@@ -6,7 +6,12 @@ def decimal_format(number, decimals = None):
     else: formatted_number = f"{number:,}"
     return formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
 
-def datetime_format(datetime, include_year = "automatic", include_time = "automatic", include_second = "automatic"):
+def datetime_format(
+    datetime,
+    include_year = "automatic",
+    include_time = "automatic",
+    include_second = "automatic"
+):
     day = datetime.day
     month = datetime.month
     year = decimal_format(datetime.year)
