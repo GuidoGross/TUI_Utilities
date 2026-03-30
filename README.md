@@ -21,8 +21,8 @@ Personal-use console utilities library providing styled terminal interaction, st
 
 **Standard library modules are used where possible; only external dependencies are listed:**
 
-- rich (12.4.4 or higher)
-- readchar (4.0.0 or higher)
+- rich (9.13.0 or higher)
+- readchar (3.0.5 or higher)
 - requests (2.25.0 or higher)
 
 ### **Python version**
@@ -33,8 +33,8 @@ Python (3.9 or higher)
 
 **Any of the following:**
 
-- Windows (8 or higher)
-- Linux (any modern Linux distribution with glibc 2.34 or higher)
+- Windows (8.1 or higher)
+- Linux (any modern distribution capable of running Python 3.9 in an interactive terminal environment)
 - MacOS (10.9 or higher)
   
 ### **Google Colaboratory support**
