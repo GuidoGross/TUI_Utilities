@@ -87,7 +87,7 @@ This library is fully compatible with Google Colaboratory.
 
 **Utilities for applying consistent formatting:**
 
-- **decimal_format():** applies Continental European numeric formatting.
+- **decimal_format():** applies Continental European numeric formatting and optional monetary value formatting.
 - **date_time_format():** formats datetime objects (uses Day–Month–Year date format with 24-hour time) with automatic or custom year, time and second inclusion.
 - **id_format():** formats Argentinian national ID numbers.
 - **cellphone_number_format():** formats cellphone numbers (uses Argentinian format).

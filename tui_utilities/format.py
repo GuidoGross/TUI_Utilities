@@ -1,10 +1,22 @@
-def decimal_format(number, decimals = None):
+def decimal_format(
+    number,
+    decimals = None,
+    monetary_value = False,
+    currency_symbol = "$",
+    currency_suffix = None
+):
     if isinstance(number, float) and number.is_integer(): number = int(number)
-    if decimals is not None:
+    if monetary_value:
+        formatted_number = f"{number:,.2f}"
+    elif decimals is not None:
         formatted_number = f"{number:,.{decimals}f}"
         if "." in formatted_number: formatted_number = formatted_number.rstrip("0").rstrip(".")
     else: formatted_number = f"{number:,}"
-    return formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
+    formatted_number = formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
+    if monetary_value:
+        if currency_symbol is not None: formatted_number = f"{currency_symbol}{formatted_number}"
+        if currency_suffix is not None: formatted_number = f"{formatted_number} {currency_suffix}"
+    return formatted_number
 
 def date_time_format(
     date_time,
