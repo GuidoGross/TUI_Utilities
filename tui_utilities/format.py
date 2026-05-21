@@ -14,8 +14,11 @@ def decimal_format(
     else: formatted_number = f"{number:,}"
     formatted_number = formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
     if monetary_value:
+        is_negative = formatted_number.startswith("-")
+        if is_negative: formatted_number = formatted_number[1:]
         if currency_symbol is not None: formatted_number = f"{currency_symbol}{formatted_number}"
         if currency_suffix is not None: formatted_number = f"{formatted_number} {currency_suffix}"
+        if is_negative: formatted_number = f"-{formatted_number}"
     return formatted_number
 
 def date_time_format(
