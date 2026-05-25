@@ -12,6 +12,9 @@ def decimal_format(
         formatted_number = f"{number:,.{decimals}f}"
         if "." in formatted_number: formatted_number = formatted_number.rstrip("0").rstrip(".")
     else: formatted_number = f"{number:,}"
+    if formatted_number.startswith("-"):
+        clean_number = formatted_number[1:].replace(",", "").replace(".", "")
+        if all(char == "0" for char in clean_number): formatted_number = formatted_number[1:]
     formatted_number = formatted_number.replace(",", "X").replace(".", ",").replace("X", ".")
     if monetary_value:
         is_negative = formatted_number.startswith("-")

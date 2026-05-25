@@ -24,6 +24,7 @@ function main {
     $total_start_time = Get-Date
     Write-Host "${bold}${italic}Comenzando proceso de publicación y actualización...${reset_style}" -ForegroundColor White
     separator
+    clean_pycache_folders
     update_tlds_list
     build_package
     upload_library_to_pypi
@@ -32,8 +33,19 @@ function main {
     finish $total_start_time
 }
 
+function clean_pycache_folders {
+    Write-Host "${bold}${italic}[1/6]${/italic} Eliminando carpetas __pycache__...${reset_style}" -ForegroundColor White
+    $current_step_start_time = Get-Date
+    $folders_to_delete = @()
+    Get-ChildItem -Path $base_path -Filter "__pycache__" -Directory -Recurse | ForEach-Object { $folders_to_delete += $_.FullName }
+    $folders_to_delete | ForEach-Object { if (Test-Path $_) { Remove-Item -Path $_ -Recurse -Force -ErrorAction SilentlyContinue } }
+    $duration = (Get-Date) - $current_step_start_time
+    Write-Host "${bold}Carpetas __pycache__ eliminadas en:${/bold} $($duration.TotalMilliseconds.ToString("N0", [cultureinfo]::GetCultureInfo("es-ES")))ms${reset_style}" -ForegroundColor Green
+    separator
+}
+
 function update_tlds_list {
-    Write-Host "${bold}${italic}[1/5]${/italic} Actualizando lista de TLDs...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[2/6]${/italic} Actualizando lista de TLDs...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     try {
         $url = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt"
@@ -54,7 +66,7 @@ function update_tlds_list {
 }
 
 function build_package {
-    Write-Host "${bold}${italic}[2/5]${/italic} Construyendo paquete...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[3/6]${/italic} Construyendo paquete...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     python -m build
     $duration = (Get-Date) - $current_step_start_time
@@ -63,7 +75,7 @@ function build_package {
 }
 
 function upload_library_to_pypi {
-    Write-Host "${bold}${italic}[3/5]${/italic} Subiendo la librería a PyPI...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[4/6]${/italic} Subiendo la librería a PyPI...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     twine upload dist/*
     $duration = (Get-Date) - $current_step_start_time
@@ -72,7 +84,7 @@ function upload_library_to_pypi {
 }
 
 function delete_temporary_files {
-    Write-Host "${bold}${italic}[4/5]${/italic} Eliminando archivos residuales...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[5/6]${/italic} Eliminando archivos residuales...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     $folders_to_delete = @("dist", "build")
     Get-ChildItem -Path $base_path -Filter "*.egg-info" -Directory | ForEach-Object { $folders_to_delete += $_.FullName }
@@ -83,7 +95,7 @@ function delete_temporary_files {
 }
 
 function update_library {
-    Write-Host "${bold}${italic}[5/5]${/italic} Actualizando librería localmente...${reset_style}" -ForegroundColor White
+    Write-Host "${bold}${italic}[6/6]${/italic} Actualizando librería localmente...${reset_style}" -ForegroundColor White
     $current_step_start_time = Get-Date
     pip install -U tui_utilities
     pip install -U tui_utilities
